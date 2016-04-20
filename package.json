@@ -1,6 +1,6 @@
 {
   "name": "@waylay/sigfox-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A parser for Sigfox's custom format grammar.",
   "main": "index.js",
   "scripts": {
