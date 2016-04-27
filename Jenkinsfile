@@ -6,5 +6,6 @@ stage 'Build'
 node {
   checkout scm
   sh "npm install"
-  sh "npm test"
+  sh "npm test | tee /dev/stderr | tap-xunit > testresults.xml"
+  step([$class: 'JUnitResultArchiver', testResults: 'testresults.xml'])
 }
