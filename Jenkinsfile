@@ -6,6 +6,6 @@ stage 'Build'
 node {
   checkout scm
   sh "npm install"
-  sh "npm test:ci"
+  sh "npm run test:ci"
   step([$class: 'JUnitResultArchiver', testResults: 'test-results.xml'])
 }
