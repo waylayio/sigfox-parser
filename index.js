@@ -1,8 +1,6 @@
-'use strict';
+'use strict'
 
-const _ = require('lodash');
-
-
+const _ = require('lodash')
 
 /**
  * Parses a message accoring to the Sigfox Payload decoding grammer.
@@ -16,28 +14,28 @@ const _ = require('lodash');
  * uint (unsigned integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  * int (signed integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  */
-module.exports =function parseMessage(data, format) {
-  const buffer = new Buffer(data, 'hex');
+module.exports = function parseMessage (data, format) {
+  const buffer = new Buffer(data, 'hex')
   const types = {
     'uint': _.curry(require('./readers/readUInt'))(buffer),
     'int': _.curry(require('./readers/readInt'))(buffer),
     'float': _.curry(require('./readers/readFloat'))(buffer),
     'bool': _.curry(require('./readers/readBool'))(buffer),
     'char': _.curry(require('./readers/readChar'))(buffer)
-  };
-  let current = 0;
-  let last = 0;
+  }
+  let current = 0
+  let last = 0
 
   return _.reduce(format.split(' '), (obj, value) => {
-    const fields = value.split(':');
-    let l = current;
-    current += last;
+    const fields = value.split(':')
+    let l = current
+    current += last
     if (fields[2] !== 'bool') {
-      l = current;
+      l = current
     }
-    obj[fields[0]] = types[fields[2]](fields[1] || l, fields[3], fields[4]);
+    obj[fields[0]] = types[fields[2]](fields[1] || l, fields[3], fields[4])
 
-    last = fields[3] / (fields[2] === 'char' ? 1 : 8);
-    return obj;
-  }, {});
+    last = fields[3] / (fields[2] === 'char' ? 1 : 8)
+    return obj
+  }, {})
 }

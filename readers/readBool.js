@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 // returns a boolean according to the nth bit of the byte.
 // <<: left bit shift
@@ -16,5 +16,5 @@
 //   10000000 -> true
 // !! convert to bool
 module.exports = function readBool(buffer, offset, position) {
-  return !!(buffer.readInt8(offset) & (1 << position));
+  return !!(buffer.readInt8(offset) & (1 << position))
 }
