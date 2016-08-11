@@ -16,5 +16,5 @@
 //   10000000 -> true
 // !! convert to bool
 module.exports = function readBool(buffer, offset, position) {
-  return !!(buffer.readInt8(buffer) & (1 << position));
+  return !!(buffer.readInt8(offset) & (1 << position));
 }
