@@ -1,9 +1,12 @@
 'use strict'
 
+/**
+ * int (signed integer) : parameters are the number of bits to include
+ * in the value, and optionally the endianness for multi-bytes integers
+ * Default is big endian
+ */
 module.exports = function readInt (buffer, offset, length, endian) {
-  if (!endian || endian === 'big-endian') {
-    return buffer.readIntBE(offset, length / 8)
-  } else {
-    return buffer.readIntLE(offset, length / 8)
-  }
+  return (!endian || endian === 'big-endian')
+    ? buffer.readIntBE(offset, length / 8)
+    : buffer.readIntLE(offset, length / 8)
 }

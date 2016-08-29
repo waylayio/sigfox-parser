@@ -1,9 +1,12 @@
 'use strict'
 
+/**
+ * uint (unsigned integer) : parameters are the number of bits to
+ * include in the value, and optionally the endianness for multi-bytes integers
+ * Default is big endian
+ */
 module.exports = function readUInt (buffer, offset, length, endian) {
-  if (!endian || endian === 'big-endian') {
-    return buffer.readUIntBE(offset, length / 8)
-  } else {
-    return buffer.readUIntLE(offset, length / 8)
-  }
+  return (!endian || endian === 'big-endian')
+    ? buffer.readUIntBE(offset, length / 8)
+    : buffer.readUIntLE(offset, length / 8)
 }
