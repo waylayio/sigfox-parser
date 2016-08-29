@@ -33,6 +33,11 @@ var cases = [
     data: '171318',
     format: 'lightAmbi::uint:16 temperature:2:int:8',
     expected: { lightAmbi: 5907, temperature: 24 }
+  },
+  {
+    data: '1E660382BA583FF426D609',
+    format: 'Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
+    expected: { Battery: 30, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
   }
 ]
 
