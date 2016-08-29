@@ -17,11 +17,11 @@ const _ = require('lodash')
 module.exports = function parseMessage (data, format) {
   const buffer = new Buffer(data, 'hex')
   const types = {
-    'uint': _.curry(require('./readers/readUInt'))(buffer),
-    'int': _.curry(require('./readers/readInt'))(buffer),
-    'float': _.curry(require('./readers/readFloat'))(buffer),
-    'bool': _.curry(require('./readers/readBool'))(buffer),
-    'char': _.curry(require('./readers/readChar'))(buffer)
+    'uint': _.curry(require('./readers/uint'))(buffer),
+    'int': _.curry(require('./readers/int'))(buffer),
+    'float': _.curry(require('./readers/float'))(buffer),
+    'bool': _.curry(require('./readers/bool'))(buffer),
+    'char': _.curry(require('./readers/char'))(buffer)
   }
   let current = 0
   let last = 0
