@@ -138,3 +138,14 @@ tap.test('test bools', function (t) {
   var result = parse(data, 'b1:0:bool:7 b2:0:bool:6 b3:0:bool:5 b4:0:bool:4 b5:0:bool:3 b6:0:bool:2 b7:0:bool:1 b8:0:bool:0')
   t.deepEqual(result, expected)
 })
+
+tap.test('Give buffer object to parse', t => {
+  t.plan(1)
+
+  var toTest = cases[0]
+  var data = new Buffer(toTest.data, 'hex')
+  var format = toTest.format
+
+  var parsed = parse(data, format)
+  t.deepEqual(parsed, toTest.expected)
+})

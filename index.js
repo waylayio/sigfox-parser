@@ -15,7 +15,10 @@ const _ = require('lodash')
  * int (signed integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  */
 module.exports = function parseMessage (data, format) {
-  const buffer = new Buffer(data, 'hex')
+  const buffer = Buffer.isBuffer(data)
+    ? data
+    : new Buffer(data, 'hex')
+
   const types = {
     'uint': _.curry(require('./readers/uint'))(buffer),
     'int': _.curry(require('./readers/int'))(buffer),
