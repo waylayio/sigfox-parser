@@ -29,16 +29,26 @@ module.exports = function parseMessage (data, format) {
   let current = 0
   let last = 0
 
-  return _.reduce(format.trim().replace(/\s+/g, ' ').split(' '), (obj, value) => {
-    const fields = value.split(':')
+  const fields = format.trim().replace(/\s+/g, ' ').split(' ')
+  return _.reduce(fields, (obj, field) => {
+    // we could use destructuring here, but that only works in Node >= 6.0.0
+    const split = field.split(':')
+
+    const name = split[0]
+    const offset = split[1]
+    const type = split[2]
+    const length = split[3]
+    const endianness = split[4]
+
     let l = current
     current += last
-    if (fields[2] !== 'bool') {
+    if (type !== 'bool') {
       l = current
     }
-    obj[fields[0]] = types[fields[2]](fields[1] || l, fields[3], fields[4])
 
-    last = fields[3] / (fields[2] === 'char' ? 1 : 8)
+    obj[name] = types[type](offset || l, length, endianness)
+
+    last = length / (type === 'char' ? 1 : 8)
     return obj
   }, {})
 }
