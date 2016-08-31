@@ -29,7 +29,7 @@ module.exports = function parseMessage (data, format) {
   let current = 0
   let last = 0
 
-  return _.reduce(format.split(' '), (obj, value) => {
+  return _.reduce(format.trim().replace(/\s+/g, ' ').split(' '), (obj, value) => {
     const fields = value.split(':')
     let l = current
     current += last
