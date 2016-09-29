@@ -6,7 +6,7 @@
  * Default is big endian
  */
 module.exports = function readUInt (buffer, offset, length, endian) {
-  return (!endian || endian === 'big-endian')
+  return endian === 'big-endian'
     ? buffer.readUIntBE(offset, length / 8)
     : buffer.readUIntLE(offset, length / 8)
 }

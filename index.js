@@ -53,7 +53,7 @@ function parseFields (format) {
       offset: split[1],
       type: split[2],
       length: split[3],
-      endianness: split[4]
+      endianness: typeof split[4] === 'undefined' ? 'big-endian' : split[4]
     }
   })
 }

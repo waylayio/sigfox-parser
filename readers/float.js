@@ -10,7 +10,7 @@
  */
 module.exports = function readFloat (buffer, offset, length, endian) {
   // big-endian (default)
-  if (!endian || endian === 'big-endian') {
+  if (endian === 'big-endian') {
     return length === 32
       ? buffer.readFloatBE(offset)
       : buffer.readDoubleBE(offset)
