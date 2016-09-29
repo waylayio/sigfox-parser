@@ -14,7 +14,7 @@ const _ = require('lodash')
  * uint (unsigned integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  * int (signed integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  */
-module.exports = function parseMessage (data, format) {
+function parseMessage (data, format) {
   const buffer = Buffer.isBuffer(data)
     ? data
     : new Buffer(data, 'hex')
@@ -29,26 +29,34 @@ module.exports = function parseMessage (data, format) {
   let current = 0
   let last = 0
 
-  const fields = format.trim().replace(/\s+/g, ' ').split(' ')
+  const fields = parseFields(format)
   return _.reduce(fields, (obj, field) => {
-    // we could use destructuring here, but that only works in Node >= 6.0.0
-    const split = field.split(':')
-
-    const name = split[0]
-    const offset = split[1]
-    const type = split[2]
-    const length = split[3]
-    const endianness = split[4]
-
     let l = current
     current += last
-    if (type !== 'bool') {
+    if (field.type !== 'bool') {
       l = current
     }
 
-    obj[name] = types[type](offset || l, length, endianness)
+    obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness)
 
-    last = length / (type === 'char' ? 1 : 8)
+    last = field.length / (field.type === 'char' ? 1 : 8)
     return obj
   }, {})
 }
+
+function parseFields (format) {
+  const fields = format.trim().replace(/\s+/g, ' ').split(' ')
+  return _.map(fields, field => {
+    const split = field.split(':')
+    return {
+      name: split[0],
+      offset: split[1],
+      type: split[2],
+      length: split[3],
+      endianness: split[4]
+    }
+  })
+}
+
+module.exports = parseMessage
+module.exports.parseFields = parseFields
