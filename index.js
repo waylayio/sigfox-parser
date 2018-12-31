@@ -17,7 +17,7 @@ const curry = require('lodash.curry')
 function parseMessage (data, format) {
   const buffer = Buffer.isBuffer(data)
     ? data
-    : new Buffer(data, 'hex')
+    : Buffer.from(data, 'hex')
 
   const types = {
     'uint': curry(require('./readers/uint'))(buffer),
@@ -37,7 +37,12 @@ function parseMessage (data, format) {
       l = current
     }
 
-    obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness)
+    try {
+      obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness)
+    } catch (e) {
+      // most off time parser fields too long for datas buffer
+      return obj
+    }
 
     last = field.length / (field.type === 'char' ? 1 : 8)
     return obj
@@ -50,9 +55,9 @@ function parseFields (format) {
     const split = field.split(':')
     return {
       name: split[0],
-      offset: split[1],
+      offset: parseInt(split[1]),
       type: split[2],
-      length: split[3],
+      length: parseInt(split[3]),
       endianness: typeof split[4] === 'undefined' ? 'big-endian' : split[4]
     }
   })

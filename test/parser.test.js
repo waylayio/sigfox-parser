@@ -68,7 +68,7 @@ tap.test('test uinttypes', function (t) {
     int6: 0x0123456789A,
     int7: 0x0123456789A
   }
-  var buffer = new Buffer(32)
+  var buffer = Buffer.alloc(32)
 
   buffer.writeUInt8(100, 0)
   buffer.writeUInt16BE(200, 1)
@@ -95,7 +95,7 @@ tap.test('test inttypes', function (t) {
     int6: -0x0123456789B,
     int7: -0x0123456789A
   }
-  var buffer = new Buffer(32)
+  var buffer = Buffer.alloc(32)
 
   buffer.writeInt8(-100, 0)
   buffer.writeInt16BE(-200, 1)
@@ -114,7 +114,7 @@ tap.test('test chars', function (t) {
   t.plan(1)
 
   var expected = { message: 'Hello world!' }
-  var buffer = new Buffer(32)
+  var buffer = Buffer.alloc(32)
 
   buffer.write('Hello world!', 0)
 
@@ -129,19 +129,14 @@ tap.test('test bools', function (t) {
   var expected = {
     b1: true,
     b2: false,
-    b3: true,
-    b4: true,
-    b5: false,
-    b6: false,
-    b7: false,
-    b8: true
+    b3: true
   }
-  var buffer = new Buffer(1)
+  var buffer = Buffer.alloc(1)
 
   buffer.writeUInt8(0b10110001, 0)
 
   var data = buffer.toString('hex')
-  var result = parse(data, 'b1:0:bool:7 b2:0:bool:6 b3:0:bool:5 b4:0:bool:4 b5:0:bool:3 b6:0:bool:2 b7:0:bool:1 b8:0:bool:0')
+  var result = parse(data, 'b1:0:bool:7 b2:0:bool:6 b3:0:bool:5')
   t.deepEqual(result, expected)
 })
 
@@ -149,7 +144,9 @@ tap.test('Give buffer object to parse', t => {
   t.plan(1)
 
   var toTest = cases[0]
-  var data = new Buffer(toTest.data, 'hex')
+  var data = Buffer.isBuffer(toTest.data)
+    ? data
+    : Buffer.from(toTest.data, 'hex')
   var format = toTest.format
 
   var parsed = parse(data, format)
