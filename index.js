@@ -1,6 +1,6 @@
 'use strict'
 
-const _ = require('lodash')
+const curry = require('lodash.curry')
 
 /**
  * Parses a message accoring to the Sigfox Payload decoding grammer.
@@ -20,17 +20,17 @@ function parseMessage (data, format) {
     : new Buffer(data, 'hex')
 
   const types = {
-    'uint': _.curry(require('./readers/uint'))(buffer),
-    'int': _.curry(require('./readers/int'))(buffer),
-    'float': _.curry(require('./readers/float'))(buffer),
-    'bool': _.curry(require('./readers/bool'))(buffer),
-    'char': _.curry(require('./readers/char'))(buffer)
+    'uint': curry(require('./readers/uint'))(buffer),
+    'int': curry(require('./readers/int'))(buffer),
+    'float': curry(require('./readers/float'))(buffer),
+    'bool': curry(require('./readers/bool'))(buffer),
+    'char': curry(require('./readers/char'))(buffer)
   }
   let current = 0
   let last = 0
 
   const fields = parseFields(format)
-  return _.reduce(fields, (obj, field) => {
+  return fields.reduce((obj, field) => {
     let l = current
     current += last
     if (field.type !== 'bool') {
@@ -46,7 +46,7 @@ function parseMessage (data, format) {
 
 function parseFields (format) {
   const fields = format.trim().replace(/\s+/g, ' ').split(' ')
-  return _.map(fields, field => {
+  return fields.map(field => {
     const split = field.split(':')
     return {
       name: split[0],
